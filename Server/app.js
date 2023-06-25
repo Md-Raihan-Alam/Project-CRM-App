@@ -9,10 +9,12 @@ const crmRouter = require("./routes/crmRouter.js");
 const authRouter = require("./routes/authRouter");
 //middlewares
 const auth = require("./middleware/authentications");
+
 app.use(express.json());
 app.get("/", (req, res) => {
   res.send("CRM has started");
 });
+//api setup
 app.use("/api/v1/CRM", auth, crmRouter);
 app.use("/api/v1/auth", authRouter);
 const port = process.env.PORT || 3000;
