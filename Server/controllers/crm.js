@@ -1,6 +1,10 @@
 const Client = require("../models/people");
 const { StatusCodes } = require("http-status-codes");
-const { findOneAndUpdate } = require("../models/users");
+const {
+  BadRequestError,
+  UnauthenticatedError,
+  NotFoundError,
+} = require("../errors");
 const createPerson = async (req, res) => {
   req.body.createdBy = req.user.userId;
   const poeple = await Client.create(req.body);
@@ -18,6 +22,9 @@ const getSinglePerson = async (req, res) => {
     params: { id: peopleId },
   } = req;
   const people = await Client.findOne({ createdBy: userId, _id: peopleId });
+  if (!people) {
+    throw new NotFoundError(`No person found by id ${userId}`);
+  }
   res.status(StatusCodes.OK).json({ people });
 };
 const updatePerson = async (req, res) => {
@@ -26,6 +33,15 @@ const updatePerson = async (req, res) => {
     user: { userId },
     params: { id: peopleId },
   } = req;
+  if (
+    name === " " ||
+    address === " " ||
+    city === " " ||
+    state === " " ||
+    position === " "
+  ) {
+    throw new BadRequestError("fields are incomplete");
+  }
   const people = await findOneAndUpdate(
     { _id: peopleId, createdBy: userId },
     req.body,
@@ -42,6 +58,9 @@ const deletePerson = async (req, res) => {
     _id: peopleId,
     createdBy: userId,
   });
+  if (!people) {
+    throw new NotFoundError(`No person found by id ${userId}`);
+  }
   res.status(StatusCodes.OK).send();
 };
 module.exports = {
