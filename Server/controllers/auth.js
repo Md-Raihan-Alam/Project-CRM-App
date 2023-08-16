@@ -20,6 +20,9 @@ const login = async (req, res) => {
     throw new UnauthenticatedError("Incorrect Password or Email");
   }
   const token = user.createJWT();
+  res.cookie("token", token, {
+    httpOnly: true,
+  });
   res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
 };
 module.exports = {

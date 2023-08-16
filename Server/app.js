@@ -1,7 +1,15 @@
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const app = express();
-
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 //connnecting db
 const connectDB = require("./db/connect");
 //router
@@ -16,8 +24,8 @@ app.get("/", (req, res) => {
 });
 //api setup
 app.use("/api/v1/CRM", auth, crmRouter);
-app.use("/api/v1/auth", authRouter);
-const port = process.env.PORT || 3000;
+app.use("/api/v1/auth", auth, authRouter);
+const port = process.env.PORT || 9000;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
