@@ -31,6 +31,7 @@ const AppContext = ({ children }) => {
       password: "",
     });
   };
+
   return (
     <GlobalContext.Provider
       value={{

@@ -1,18 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./LoginPage.css";
 import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [redirect, setRedirect] = useState(false);
   const { loginInfo, handleLogin, setUserInfo, handleLoginReset } =
     useGlobalContext();
   const { email, password } = loginInfo;
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          "http://localhost:9000/api/v1/auth/authVerify",
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.data.operation === "success") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error while verifying token:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // console.log(loginInfo);
       const response = await axios.post(
         "http://localhost:9000/api/v1/auth/login",
         loginInfo,

@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
@@ -25,7 +26,20 @@ const login = async (req, res) => {
   });
   res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
 };
+const authVerify = async (req, res) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(StatusCodes.BAD_GATEWAY).json({ operation: "unsuccess" });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return res.status(StatusCodes.OK).json({ operation: "success" });
+  } catch (error) {
+    return res.status(StatusCodes.BAD_GATEWAY).json({ operation: "unsuccess" });
+  }
+};
 module.exports = {
   register,
   login,
+  authVerify,
 };

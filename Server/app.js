@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 });
 //api setup
 app.use("/api/v1/CRM", auth, crmRouter);
-app.use("/api/v1/auth", auth, authRouter);
+app.use("/api/v1/auth", authRouter);
 const port = process.env.PORT || 9000;
 const start = async () => {
   try {

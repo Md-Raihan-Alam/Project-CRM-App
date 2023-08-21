@@ -1,15 +1,18 @@
 const jwt = require("jsonwebtoken");
-const auth = async (req, res, next) => {
+const authenticateToken = (req, res, next) => {
   const token = req.cookies.token;
+
   if (!token) {
-    return res.redirect("/");
+    throw new UnauthenticatedError("User not allowed");
   }
+
   try {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    next();
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // req.user = decoded.user;
   } catch (error) {
     res.clearCookie("token");
-    return res.redirect("/");
+    throw new UnauthenticatedError("User not allowed");
   }
 };
-module.exports = auth;
+
+module.exports = authenticateToken;

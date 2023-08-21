@@ -1,14 +1,36 @@
 import React from "react";
 import "./RegisterPage.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import axios from "axios";
 const RegisterPage = () => {
   const { registerInfo, handleRegister, handleRegisterReset } =
     useGlobalContext();
   const { name, email, password } = registerInfo;
   const navigate = useNavigate();
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          "http://localhost:9000/api/v1/auth/authVerify",
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.data.operation === "success") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error while verifying token:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
