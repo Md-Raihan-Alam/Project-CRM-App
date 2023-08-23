@@ -11,10 +11,31 @@ const RegisterPage = () => {
   const { name, email, password } = registerInfo;
   const navigate = useNavigate();
   useEffect(() => {
+    function getCookie(cname) {
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(";");
+
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === " ") {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    const cookieValue = getCookie("token");
     async function fetchData() {
       try {
-        const response = await axios.get(
+        const response = await axios.post(
           "http://localhost:9000/api/v1/auth/authVerify",
+          {
+            token: cookieValue,
+          },
           {
             withCredentials: true,
           }

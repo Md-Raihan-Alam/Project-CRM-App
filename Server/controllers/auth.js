@@ -22,20 +22,21 @@ const login = async (req, res) => {
   }
   const token = user.createJWT();
   res.cookie("token", token, {
-    httpOnly: true,
+    httpOnly: false,
   });
   res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
 };
 const authVerify = async (req, res) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(StatusCodes.BAD_GATEWAY).json({ operation: "unsuccess" });
-  }
+  const { token } = req.body;
   try {
+    // console.log(token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // console.log(decoded);
     return res.status(StatusCodes.OK).json({ operation: "success" });
   } catch (error) {
-    return res.status(StatusCodes.BAD_GATEWAY).json({ operation: "unsuccess" });
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ operation: "unsuccess" });
   }
 };
 module.exports = {
