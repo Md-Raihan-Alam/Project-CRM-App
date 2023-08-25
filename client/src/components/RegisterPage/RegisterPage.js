@@ -1,11 +1,13 @@
 import React from "react";
 import "./RegisterPage.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 const RegisterPage = () => {
+  const [error, setError] = useState("");
+  const [errorFound, setErrorFound] = useState(false);
   const { registerInfo, handleRegister, handleRegisterReset } =
     useGlobalContext();
   const { name, email, password } = registerInfo;
@@ -64,15 +66,22 @@ const RegisterPage = () => {
       );
       if (response.status >= 200 && response.status < 300) {
         handleRegisterReset();
+        setErrorFound(false);
+        setError("");
         navigate("/");
       }
     } catch (error) {
+      setErrorFound(true);
+      setError(error.response.data.message);
       console.log(error);
     }
   };
   return (
     <div className="d-flex flex-column justify-content-center align-items-center min-vh-100">
       <form className="w-50 border p-2 rounded" onSubmit={handleSubmit}>
+        {errorFound && (
+          <div className="text-center bg-danger text-white p-4">{error}</div>
+        )}
         <h2 className="text-center mb-4">Register</h2>
         <div className="form-group p-2">
           <label htmlFor="name" className="p-1">

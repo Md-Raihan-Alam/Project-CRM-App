@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../context";
 import { useState } from "react";
 const LoginPage = () => {
+  const [error, setError] = useState("");
+  const [errorFound, setErrorFound] = useState(false);
   const navigate = useNavigate();
   const [redirect, setRedirect] = useState(false);
   const { loginInfo, handleLogin, setUserInfo, handleLoginReset } =
@@ -44,6 +46,7 @@ const LoginPage = () => {
         if (response.data.operation === "success") {
           navigate("/dashboard");
         } else {
+          setErrorFound(false);
           navigate("/");
         }
       } catch (error) {
@@ -66,16 +69,15 @@ const LoginPage = () => {
           withCredentials: true,
         }
       );
-      if (response.status === 200) {
-        setUserInfo(response.data.user.name);
-        setRedirect(true);
-        handleLoginReset();
-      } else {
-        alert("Failed");
-      }
+      // setUserInfo(response.data.user.name);
+      setErrorFound(false);
+      setRedirect(true);
+      handleLoginReset();
+      setError("");
     } catch (error) {
-      alert("Failed 1");
-      console.log(error);
+      // alert("Failed 1");
+      setErrorFound(true);
+      setError(error.response.data.message);
     }
   };
   if (redirect) {
@@ -84,6 +86,9 @@ const LoginPage = () => {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center min-vh-100">
       <form className="w-50 border p-2 rounded" onSubmit={handleSubmit}>
+        {errorFound && (
+          <div className="text-center bg-danger text-white p-4">{error}</div>
+        )}
         <h2 className="text-center mb-4">Login</h2>
         <div className="form-group p-2">
           <label htmlFor="email" className="p-1">
