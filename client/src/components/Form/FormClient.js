@@ -1,0 +1,184 @@
+import axios from "axios";
+import { useGlobalContext } from "../../context";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+const FormClient = () => {
+  const [error, setError] = useState("");
+  const [errorFound, setErrorFound] = useState(false);
+  const navigate = useNavigate();
+  const { setUserInfo, customerInfo, handleCustomerInfo, handleCustomerReset } =
+    useGlobalContext();
+  const { name, address, city, state, zipcode } = customerInfo;
+  function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(";");
+
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === " ") {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+  useEffect(() => {
+    const cookieValue = getCookie("token");
+    async function fetchData() {
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/api/v1/auth/authVerify",
+          {
+            token: cookieValue,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.data.operation === "success") {
+          navigate("/addClient");
+          setUserInfo(response.data.name);
+        } else {
+          navigate("/");
+          setUserInfo("");
+        }
+      } catch (error) {
+        setUserInfo("");
+        navigate("/");
+        console.error("Error while verifying token:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+  const handleClient = async (e) => {
+    e.preventDefault();
+    const tokenValue = getCookie("token");
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/api/v1/CRM",
+        customerInfo,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenValue}`,
+          },
+        }
+      );
+      if (response.status >= 200 && response.status < 300) {
+        handleCustomerReset();
+        setErrorFound(false);
+        setError("");
+      }
+    } catch (error) {
+      setErrorFound(true);
+      setError(error.response.data.message);
+    }
+  };
+  return (
+    <div className="container-fluid vh-100 d-flex align-items-center justify-content-center">
+      <div className="border p-4">
+        {errorFound && (
+          <div className="text-center bg-danger text-white p-4">{error}</div>
+        )}
+        <h2 className="mb-4">Customer Information</h2>
+        <form>
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">
+              Name
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="name"
+              value={name}
+              onChange={handleCustomerInfo}
+              placeholder="Enter customer name"
+              autoCorrect="off"
+              autoComplete="off"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="address" className="form-label">
+              Address
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="address"
+              value={address}
+              onChange={handleCustomerInfo}
+              placeholder="Enter customer address"
+              autoCorrect="off"
+              autoComplete="off"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="city" className="form-label">
+              City
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              name="city"
+              value={city}
+              onChange={handleCustomerInfo}
+              placeholder="Enter customer city"
+              autoCorrect="off"
+              autoComplete="off"
+              required
+            />
+          </div>
+          <div className="row">
+            <div className="col-md-6 mb-3">
+              <label htmlFor="state" className="form-label">
+                State
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="state"
+                value={state}
+                onChange={handleCustomerInfo}
+                placeholder="Enter customer state"
+                autoCorrect="off"
+                autoComplete="off"
+                required
+              />
+            </div>
+            <div className="col-md-6 mb-3">
+              <label htmlFor="zipcode" className="form-label">
+                Zipcode
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="zipcode"
+                value={zipcode}
+                onChange={handleCustomerInfo}
+                placeholder="Enter customer zipcode"
+                autoCorrect="off"
+                autoComplete="off"
+                required
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            onClick={handleClient}
+            className="btn w-100 btn-primary"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default FormClient;

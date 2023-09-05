@@ -16,10 +16,10 @@ const PeopleScehma = new mongoose.Schema(
     },
     state: {
       type: String,
-      default: "N/A",
+      required: [true, "please provide state here"],
     },
     zipcode: {
-      type: Number,
+      type: String,
       required: [true, "pleasae provide zipcode here"],
     },
     createdBy: {

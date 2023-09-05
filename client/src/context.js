@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
 const AppContext = ({ children }) => {
-  const [useInfo, setUserInfo] = useState("");
+  const [userInfo, setUserInfo] = useState("");
   const [registerInfo, setRegisterInfo] = useState({
     name: "",
     email: "",
@@ -12,11 +12,21 @@ const AppContext = ({ children }) => {
     email: "",
     password: "",
   });
+  const [customerInfo, setCustomerInfo] = useState({
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    zipcode: "",
+  });
   const handleLogin = (e) => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   };
   const handleRegister = (e) => {
     setRegisterInfo({ ...registerInfo, [e.target.name]: e.target.value });
+  };
+  const handleCustomerInfo = (e) => {
+    setCustomerInfo({ ...customerInfo, [e.target.name]: e.target.value });
   };
   const handleRegisterReset = () => {
     setRegisterInfo({
@@ -31,7 +41,15 @@ const AppContext = ({ children }) => {
       password: "",
     });
   };
-
+  const handleCustomerReset = () => {
+    setCustomerInfo({
+      name: "",
+      address: "",
+      city: "",
+      state: "",
+      zipcode: "",
+    });
+  };
   return (
     <GlobalContext.Provider
       value={{
@@ -41,7 +59,11 @@ const AppContext = ({ children }) => {
         loginInfo,
         handleLogin,
         handleLoginReset,
+        userInfo,
         setUserInfo,
+        customerInfo,
+        handleCustomerInfo,
+        handleCustomerReset,
       }}
     >
       {children}

@@ -1,3 +1,4 @@
-.test {
-  font-size: 50px;
+.overflow_set {
+  width: 100%;
+  overflow-x: auto;
 }

@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
 import "./LoginPage.css";
 import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const LoginPage = () => {
   const [error, setError] = useState("");
   const [errorFound, setErrorFound] = useState(false);
@@ -44,12 +43,15 @@ const LoginPage = () => {
           }
         );
         if (response.data.operation === "success") {
+          setUserInfo(response.data.name);
           navigate("/dashboard");
         } else {
-          setErrorFound(false);
           navigate("/");
+          setUserInfo("");
         }
       } catch (error) {
+        setUserInfo("");
+        navigate("/");
         console.error("Error while verifying token:", error);
       }
     }
@@ -69,7 +71,6 @@ const LoginPage = () => {
           withCredentials: true,
         }
       );
-      // setUserInfo(response.data.user.name);
       setErrorFound(false);
       setRedirect(true);
       handleLoginReset();

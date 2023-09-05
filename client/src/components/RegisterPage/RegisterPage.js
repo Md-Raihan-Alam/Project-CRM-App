@@ -8,7 +8,7 @@ import axios from "axios";
 const RegisterPage = () => {
   const [error, setError] = useState("");
   const [errorFound, setErrorFound] = useState(false);
-  const { registerInfo, handleRegister, handleRegisterReset } =
+  const { registerInfo, handleRegister, setUserInfo, handleRegisterReset } =
     useGlobalContext();
   const { name, email, password } = registerInfo;
   const navigate = useNavigate();
@@ -43,11 +43,15 @@ const RegisterPage = () => {
           }
         );
         if (response.data.operation === "success") {
+          setUserInfo(response.data.name);
           navigate("/dashboard");
         } else {
-          navigate("/");
+          navigate("/register");
+          setUserInfo("");
         }
       } catch (error) {
+        setUserInfo("");
+        navigate("/register");
         console.error("Error while verifying token:", error);
       }
     }

@@ -3,6 +3,7 @@ import "./App.css";
 import LoginPage from "./components/LoginPage/LoginPage";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
 import DashBoard from "./components/Dashboard/DashBoard";
+import FormClient from "./components/Form/FormClient";
 // import NavBar from "./components/Navbar/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <Route index element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="dashboard" element={<DashBoard />} />
+          <Route path="addClient" element={<FormClient />} />
         </Route>
       </Routes>
     </BrowserRouter>

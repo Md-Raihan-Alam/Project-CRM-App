@@ -7,14 +7,33 @@ const {
 } = require("../errors");
 const createPerson = async (req, res) => {
   req.body.createdBy = req.user.userId;
-  const poeple = await Client.create(req.body);
-  res.status(StatusCodes.CREATED).json({ poeple });
+  const { name, address, city, state, zipcode } = req.body;
+  if (!name || !address || !city || !state || !zipcode) {
+    return res
+      .status(StatusCodes.EXPECTATION_FAILED)
+      .json({ message: "Fields must not be empty" });
+  }
+  try {
+    const poeple = await Client.create(req.body);
+    return res.status(StatusCodes.CREATED).json({ message: "success" });
+  } catch (error) {
+    return res
+      .status(StatusCodes.EXPECTATION_FAILED)
+      .json({ message: "Fields data must be correct" });
+  }
 };
 const getAllPerson = async (req, res) => {
-  const peoples = await Client.find({ createdBy: req.user.userId }).sort(
-    "createdAt"
-  );
-  res.send(StatusCodes.OK).json({ peoples, count: peoples.length });
+  try {
+    const peoples = await Client.find({ createdBy: req.user.userId }).sort(
+      "createdAt"
+    );
+    // console.log(peoples);
+    return res.status(StatusCodes.OK).json({ peoples, count: peoples.length });
+  } catch (error) {
+    return res
+      .status(StatusCodes.EXPECTATION_FAILED)
+      .json({ message: "There is some problem. Please try again later" });
+  }
 };
 const getSinglePerson = async (req, res) => {
   const {

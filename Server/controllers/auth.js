@@ -56,18 +56,23 @@ const login = async (req, res) => {
 const authVerify = async (req, res) => {
   const { token } = req.body;
   try {
-    // console.log(token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // console.log(decoded);
-    return res.status(StatusCodes.OK).json({ operation: "success" });
+    return res
+      .status(StatusCodes.OK)
+      .json({ operation: "success", name: decoded.name });
   } catch (error) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
       .json({ operation: "unsuccess" });
   }
 };
+const logout = async (req, res) => {
+  res.cookie("token", "");
+  res.status(StatusCodes.OK).json({ message: "success" });
+};
 module.exports = {
   register,
   login,
   authVerify,
+  logout,
 };
