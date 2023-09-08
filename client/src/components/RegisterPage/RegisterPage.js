@@ -22,7 +22,7 @@ const RegisterPage = () => {
     async function fetchData() {
       try {
         const response = await axios.post(
-          "http://localhost:9000/api/v1/auth/authVerify",
+          "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/auth/authVerify",
           {
             token: cookieValue,
           },
@@ -50,7 +50,7 @@ const RegisterPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/v1/auth/register",
+        "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/auth/register",
         registerInfo,
         {
           headers: { "Content-Type": "application/json" },

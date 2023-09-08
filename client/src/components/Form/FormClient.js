@@ -21,7 +21,7 @@ const FormClient = () => {
     async function fetchData() {
       try {
         const response = await axios.post(
-          "http://localhost:9000/api/v1/auth/authVerify",
+          "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/auth/authVerify",
           {
             token: cookieValue,
           },
@@ -50,7 +50,7 @@ const FormClient = () => {
     const tokenValue = getCookie("token");
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/v1/CRM",
+        "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/CRM",
         customerInfo,
         {
           headers: {
