@@ -9,7 +9,7 @@ app.use(
       "https://project-crm-app-cf14.vercel.app",
       "https://project-crm-app-cf14-git-main-md-raihan-alam.vercel.app",
       "https://project-crm-app-cf14-4vha7nqft-md-raihan-alam.vercel.app",
-      "https://project-crm-app-cf14-b98ei5abd-md-raihan-alam.vercel.app", // Remove the extra comma at the end of this line
+      "https://project-crm-app-cf14-b98ei5abd-md-raihan-alam.vercel.app",
     ],
     credentials: true,
   })
