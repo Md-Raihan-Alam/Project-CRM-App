@@ -5,10 +5,15 @@ const cookieParser = require("cookie-parser");
 const app = express();
 app.use(
   cors({
-    origin: "https://project-crm-app-cf14.vercel.app/",
+    origin: [
+      "https://project-crm-app-cf14.vercel.app",
+      "https://project-crm-app-cf14-git-main-md-raihan-alam.vercel.app",
+      "https://project-crm-app-cf14-4vha7nqft-md-raihan-alam.vercel.app",
+    ],
     credentials: true,
   })
 );
+
 app.use(cookieParser());
 //connnecting db
 const connectDB = require("./db/connect");
