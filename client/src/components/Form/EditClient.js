@@ -1,23 +1,24 @@
 import axios from "axios";
 import { useGlobalContext } from "../../context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-const FormClient = () => {
+const EditClient = () => {
+  const { customerId } = useParams();
   const [error, setError] = useState("");
   const [errorFound, setErrorFound] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const {
     getCookie,
     setUserInfo,
     customerInfo,
+    setCustomerInfo,
     handleCustomerInfo,
     handleCustomerReset,
   } = useGlobalContext();
   const { name, address, city, state, zipcode } = customerInfo;
   useEffect(() => {
     const cookieValue = getCookie("token");
-    handleCustomerReset();
     async function fetchData() {
       try {
         const response = await axios.post(
@@ -30,7 +31,6 @@ const FormClient = () => {
           }
         );
         if (response.data.operation === "success") {
-          navigate("/addClient");
           setUserInfo(response.data.name);
         } else {
           navigate("/");
@@ -42,15 +42,51 @@ const FormClient = () => {
         console.error("Error while verifying token:", error);
       }
     }
-
     fetchData();
+    const customerData = async () => {
+      const tokenValue = getCookie("token");
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/api/v1/CRM/${customerId}`,
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${tokenValue}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          setErrorFound(false);
+          setError("");
+          setLoading(false);
+          setCustomerInfo(response.data.people);
+          // console.log(response);
+        } else {
+          // console.log("HERE");
+          setErrorFound(false);
+          setLoading(false);
+          setError("");
+          // console.log(response);
+          navigate("/dashboard");
+          handleCustomerReset();
+        }
+      } catch (error) {
+        // console.log("HERE2");
+        setErrorFound(false);
+        setLoading(false);
+        setError("");
+        // console.log(error);
+        navigate("/dashboard");
+        handleCustomerReset();
+      }
+    };
+    customerData();
   }, []);
-  const handleClient = async (e) => {
-    e.preventDefault();
+  const handleUpdate = async (e) => {
     const tokenValue = getCookie("token");
     try {
-      const response = await axios.post(
-        "http://localhost:9000/api/v1/CRM",
+      const response = await axios.patch(
+        `http://localhost:9000/api/v1/CRM/${customerId}`,
         customerInfo,
         {
           headers: {
@@ -59,33 +95,36 @@ const FormClient = () => {
           },
         }
       );
-      if (response.status >= 200 && response.status < 300) {
-        handleCustomerReset();
-        setErrorFound(false);
-        setError("");
-        setSuccess(true);
-        setTimeout(() => {
-          setSuccess(false);
-        }, 2000);
+      if (response.status === 200) {
+        navigate("/dashboard");
+      } else {
+        setErrorFound(true);
+        setError(response.data.message);
       }
     } catch (error) {
+      console.log(error);
       setErrorFound(true);
-      setSuccess(false);
       setError(error.response.data.message);
     }
   };
+
+  const goBack = () => {
+    navigate("/dashboard");
+  };
+  if (loading === true) {
+    return (
+      <div className="container">
+        <div className="text-center display-6 mt-5">Loading....</div>
+      </div>
+    );
+  }
   return (
     <div className="container-fluid vh-100 d-flex align-items-center justify-content-center">
       <div className="border p-4">
         {errorFound && (
           <div className="text-center bg-danger text-white p-4">{error}</div>
         )}
-        {success && (
-          <div className="text-center bg-success text-white p-4">
-            Customer has been added
-          </div>
-        )}
-        <h2 className="mb-4">Customer Information</h2>
+        <h2 className="mb-4">Edit Customer Information</h2>
         <form>
           <div className="mb-3">
             <label htmlFor="name" className="form-label">
@@ -171,10 +210,17 @@ const FormClient = () => {
           </div>
           <button
             type="submit"
-            onClick={handleClient}
+            onClick={handleUpdate}
             className="btn w-100 btn-primary"
           >
-            Submit
+            Update
+          </button>
+          <button
+            type="btn"
+            onClick={goBack}
+            className="btn my-2 w-100 btn-info"
+          >
+            Dashboard
           </button>
         </form>
       </div>
@@ -182,4 +228,4 @@ const FormClient = () => {
   );
 };
 
-export default FormClient;
+export default EditClient;

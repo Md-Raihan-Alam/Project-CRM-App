@@ -27,7 +27,6 @@ const getAllPerson = async (req, res) => {
     const peoples = await Client.find({ createdBy: req.user.userId }).sort(
       "createdAt"
     );
-    // console.log(peoples);
     return res.status(StatusCodes.OK).json({ peoples, count: peoples.length });
   } catch (error) {
     return res
@@ -37,19 +36,33 @@ const getAllPerson = async (req, res) => {
 };
 const getSinglePerson = async (req, res) => {
   const {
-    user: userId,
+    user: { userId: userID },
     params: { id: peopleId },
   } = req;
-  const people = await Client.findOne({ createdBy: userId, _id: peopleId });
-  if (!people) {
-    throw new NotFoundError(`No person found by id ${userId}`);
+  // console.log(req.user.userId);
+  // console.log(peopleId);
+  try {
+    const people = await Client.findOne({
+      createdBy: userID,
+      _id: peopleId,
+    });
+    // console.log(people);
+    if (!people) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "unsuccess" });
+    }
+    return res
+      .status(StatusCodes.OK)
+      .json({ people: people, message: "success" });
+  } catch (error) {
+    return res
+      .status(StatusCodes.EXPECTATION_FAILED)
+      .json({ message: "unsuccess" });
   }
-  res.status(StatusCodes.OK).json({ people });
 };
 const updatePerson = async (req, res) => {
   const {
     body: { name, address, city, state, zipcode },
-    user: { userId },
+    user: { userId: userID },
     params: { id: peopleId },
   } = req;
   if (
@@ -57,29 +70,35 @@ const updatePerson = async (req, res) => {
     address === " " ||
     city === " " ||
     state === " " ||
-    position === " "
+    zipcode === " "
   ) {
-    throw new BadRequestError("fields are incomplete");
+    return res
+      .status(StatusCodes.EXPECTATION_FAILED)
+      .json({ message: "Fields data must not be empty" });
   }
-  const people = await findOneAndUpdate(
-    { _id: peopleId, createdBy: userId },
-    req.body,
-    { new: true, runValidators: true }
-  );
-  res.status(StatusCodes.OK).json({ people });
+  try {
+    const people = await Client.findOneAndUpdate(
+      { _id: peopleId, createdBy: userID },
+      req.body,
+      { new: true, runValidators: true }
+    );
+    // console.log(people);
+    return res.status(StatusCodes.OK).json({ message: "success" });
+  } catch (error) {
+    return res
+      .status(StatusCodes.EXPECTATION_FAILED)
+      .json({ message: "Some error occured. Please try again later" });
+  }
 };
 const deletePerson = async (req, res) => {
   const {
-    user: userId,
+    user: { userId: userID },
     params: { id: peopleId },
   } = req;
   const people = await Client.findByIdAndRemove({
     _id: peopleId,
-    createdBy: userId,
+    createdBy: userID,
   });
-  if (!people) {
-    throw new NotFoundError(`No person found by id ${userId}`);
-  }
   res.status(StatusCodes.OK).send();
 };
 module.exports = {

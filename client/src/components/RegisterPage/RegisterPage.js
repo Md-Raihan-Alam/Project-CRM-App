@@ -8,28 +8,16 @@ import axios from "axios";
 const RegisterPage = () => {
   const [error, setError] = useState("");
   const [errorFound, setErrorFound] = useState(false);
-  const { registerInfo, handleRegister, setUserInfo, handleRegisterReset } =
-    useGlobalContext();
+  const {
+    getCookie,
+    registerInfo,
+    handleRegister,
+    setUserInfo,
+    handleRegisterReset,
+  } = useGlobalContext();
   const { name, email, password } = registerInfo;
   const navigate = useNavigate();
   useEffect(() => {
-    function getCookie(cname) {
-      let name = cname + "=";
-      let decodedCookie = decodeURIComponent(document.cookie);
-      let ca = decodedCookie.split(";");
-
-      for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === " ") {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) === 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
-    }
-
     const cookieValue = getCookie("token");
     async function fetchData() {
       try {

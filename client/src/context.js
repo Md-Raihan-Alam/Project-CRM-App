@@ -2,6 +2,8 @@ import { createContext, useContext, useState } from "react";
 const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
 const AppContext = ({ children }) => {
+  const [error, setError] = useState("");
+  const [errorFound, setErrorFound] = useState(false);
   const [userInfo, setUserInfo] = useState("");
   const [registerInfo, setRegisterInfo] = useState({
     name: "",
@@ -19,6 +21,22 @@ const AppContext = ({ children }) => {
     state: "",
     zipcode: "",
   });
+  function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(";");
+
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === " ") {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
   const handleLogin = (e) => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   };
@@ -53,6 +71,10 @@ const AppContext = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
+        error,
+        setError,
+        errorFound,
+        setErrorFound,
         registerInfo,
         handleRegister,
         handleRegisterReset,
@@ -62,8 +84,10 @@ const AppContext = ({ children }) => {
         userInfo,
         setUserInfo,
         customerInfo,
+        setCustomerInfo,
         handleCustomerInfo,
         handleCustomerReset,
+        getCookie,
       }}
     >
       {children}
