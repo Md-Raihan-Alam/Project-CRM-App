@@ -83,6 +83,7 @@ const EditClient = () => {
     customerData();
   }, []);
   const handleUpdate = async (e) => {
+    e.preventDefault();
     const tokenValue = getCookie("token");
     try {
       const response = await axios.patch(
