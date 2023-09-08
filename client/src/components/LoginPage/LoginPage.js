@@ -54,6 +54,9 @@ const LoginPage = () => {
           withCredentials: true,
         }
       );
+      const d = new Date();
+      d.setTime(d.getTime() + response.data.time * 24 * 60 * 60 * 1000);
+      document.cookie = `token=${response.data.token}; expires=${d}; path=/`;
       setErrorFound(false);
       setRedirect(true);
       handleLoginReset();

@@ -6,21 +6,8 @@ const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { userInfo, setUserInfo } = useGlobalContext();
-  const handleLogOut = async () => {
-    try {
-      const response = await axios.get(
-        "https://project-crm-app.vercel.app/api/v1/auth/logout",
-        {
-          withCredentials: true,
-        }
-      );
-      if (response.data.message === "success") {
-        setUserInfo("");
-        navigate("/");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleLogOut = () => {
+    document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
   };
   const createCustomer = () => {
     if (location.pathname === "/addClient") navigate("/dashboard");

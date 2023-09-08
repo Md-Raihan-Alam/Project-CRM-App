@@ -48,10 +48,11 @@ const login = async (req, res) => {
       .json({ message: "Incorrect password" });
   }
   const token = user.createJWT();
-  res.cookie("token", token, {
-    httpOnly: false,
+  res.status(StatusCodes.OK).json({
+    message: "success",
+    token: token,
+    time: process.env.JWT_TIME.split("d")[0],
   });
-  res.status(StatusCodes.OK).json({ message: "success" });
 };
 const authVerify = async (req, res) => {
   const { token } = req.body;
