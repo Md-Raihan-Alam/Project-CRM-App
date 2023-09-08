@@ -3,7 +3,12 @@ const cors = require("cors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://project-crm-app-cf14.vercel.app/",
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 //connnecting db
 const connectDB = require("./db/connect");
