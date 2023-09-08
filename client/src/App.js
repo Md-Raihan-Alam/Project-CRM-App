@@ -20,6 +20,7 @@ function App() {
             <Route path=":customerId" element={<EditClient />} />
           </Route>
           <Route path="addClient" element={<FormClient />} />
+          <Route path="*" element={<DashBoard />} />
         </Route>
       </Routes>
     </BrowserRouter>

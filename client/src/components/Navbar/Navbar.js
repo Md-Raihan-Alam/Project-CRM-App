@@ -8,6 +8,7 @@ const NavBar = () => {
   const { userInfo, setUserInfo } = useGlobalContext();
   const handleLogOut = () => {
     document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+    navigate("/");
   };
   const createCustomer = () => {
     if (location.pathname === "/addClient") navigate("/dashboard");
