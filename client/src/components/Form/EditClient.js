@@ -125,7 +125,7 @@ const EditClient = () => {
           <div className="text-center bg-danger text-white p-4">{error}</div>
         )}
         <h2 className="mb-4">Edit Customer Information</h2>
-        <form>
+        <form onSubmit={handleUpdate}>
           <div className="mb-3">
             <label htmlFor="name" className="form-label">
               Name
@@ -208,11 +208,7 @@ const EditClient = () => {
               />
             </div>
           </div>
-          <button
-            type="submit"
-            onClick={handleUpdate}
-            className="btn w-100 btn-primary"
-          >
+          <button type="submit" className="btn w-100 btn-primary">
             Update
           </button>
           <button
