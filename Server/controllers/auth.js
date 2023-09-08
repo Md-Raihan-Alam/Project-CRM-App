@@ -63,7 +63,7 @@ const authVerify = async (req, res) => {
   } catch (error) {
     return res
       .status(StatusCodes.UNAUTHORIZED)
-      .json({ operation: "unsuccess" });
+      .json({ operation: "unsuccess", err: error });
   }
 };
 const logout = async (req, res) => {
