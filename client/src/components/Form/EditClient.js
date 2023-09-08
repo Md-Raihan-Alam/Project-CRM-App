@@ -22,7 +22,7 @@ const EditClient = () => {
     async function fetchData() {
       try {
         const response = await axios.post(
-          "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/auth/authVerify",
+          "https://project-crm-app.vercel.app/api/v1/auth/authVerify",
           {
             token: cookieValue,
           },
@@ -47,7 +47,7 @@ const EditClient = () => {
       const tokenValue = getCookie("token");
       try {
         const response = await axios.get(
-          `https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/CRM/${customerId}`,
+          `https://project-crm-app.vercel.app/api/v1/CRM/${customerId}`,
           {
             withCredentials: true,
             headers: {
@@ -86,7 +86,7 @@ const EditClient = () => {
     const tokenValue = getCookie("token");
     try {
       const response = await axios.patch(
-        `https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/CRM/${customerId}`,
+        `https://project-crm-app.vercel.app/api/v1/CRM/${customerId}`,
         customerInfo,
         {
           headers: {

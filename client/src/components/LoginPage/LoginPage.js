@@ -17,7 +17,7 @@ const LoginPage = () => {
     async function fetchData() {
       try {
         const response = await axios.post(
-          "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/auth/authVerify",
+          "https://project-crm-app.vercel.app/api/v1/auth/authVerify",
           {
             token: cookieValue,
           },
@@ -45,7 +45,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/auth/login",
+        "https://project-crm-app.vercel.app/api/v1/auth/login",
         loginInfo,
         {
           headers: {

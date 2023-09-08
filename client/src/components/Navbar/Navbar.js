@@ -9,7 +9,7 @@ const NavBar = () => {
   const handleLogOut = async () => {
     try {
       const response = await axios.get(
-        "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/auth/logout",
+        "https://project-crm-app.vercel.app/api/v1/auth/logout",
         {
           withCredentials: true,
         }

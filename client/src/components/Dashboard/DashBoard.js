@@ -15,7 +15,7 @@ const DashBoard = () => {
     const tokenValue = getCookie("token");
     try {
       const response = await axios.get(
-        "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/CRM",
+        "https://project-crm-app.vercel.app/api/v1/CRM",
         {
           withCredentials: true,
           headers: {
@@ -42,7 +42,7 @@ const DashBoard = () => {
     const cookieValue = getCookie("token");
     try {
       const response = await axios.post(
-        "https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/auth/authVerify",
+        "https://project-crm-app.vercel.app/api/v1/auth/authVerify",
         {
           token: cookieValue,
         },
@@ -72,7 +72,7 @@ const DashBoard = () => {
     const tokenValue = getCookie("token");
     try {
       const response = await axios.delete(
-        `https://vercel.com/md-raihan-alam/project-crm-app/Cxge1FU1Q2ZqTydLw1PWTYJ1VSte/api/v1/CRM/${e}`,
+        `https://project-crm-app.vercel.app/api/v1/CRM/${e}`,
         {
           headers: {
             Authorization: `Bearer ${tokenValue}`,
