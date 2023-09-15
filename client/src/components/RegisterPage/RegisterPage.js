@@ -69,8 +69,11 @@ const RegisterPage = () => {
     }
   };
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center min-vh-100">
-      <form className="w-50 border p-2 rounded" onSubmit={handleSubmit}>
+    <div className="container-fluid d-flex flex-column justify-content-center align-items-center min-vh-100">
+      <form
+        className="col-10 col-md-8 col-lg-6 border p-2 rounded"
+        onSubmit={handleSubmit}
+      >
         {errorFound && (
           <div className="text-center bg-danger text-white p-4">{error}</div>
         )}

@@ -42,16 +42,20 @@ const NavBar = () => {
           )}
           {!userInfo && (
             <>
-              <Link to="/" className="nav-link text-white mx-2" href="/">
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="nav-link text-white mx-2"
-                href="/about"
-              >
-                Register
-              </Link>
+              {location.pathname === "/register" && (
+                <Link to="/" className="nav-link text-white mx-2" href="/">
+                  Login
+                </Link>
+              )}
+              {location.pathname === "/" && (
+                <Link
+                  to="/register"
+                  className="nav-link text-white mx-2"
+                  href="/about"
+                >
+                  Register
+                </Link>
+              )}
             </>
           )}
         </div>
