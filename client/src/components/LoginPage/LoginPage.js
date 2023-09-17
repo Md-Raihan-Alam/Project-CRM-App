@@ -77,7 +77,9 @@ const LoginPage = () => {
         onSubmit={handleSubmit}
       >
         {errorFound && (
-          <div className="text-center bg-danger text-white p-4">{error}</div>
+          <div className="text-center bg-danger text-white p-4">
+            {error === "" ? "Something went wrong, try later" : error}
+          </div>
         )}
         <h2 className="text-center mb-4">Login</h2>
         <div className="form-group p-2">

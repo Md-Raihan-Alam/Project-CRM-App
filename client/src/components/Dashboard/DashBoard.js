@@ -107,7 +107,9 @@ const DashBoard = () => {
   if (errorFound === true) {
     return (
       <div className="container overflow_set">
-        <div className="alert alert-danger mt-5 text-center">{error}</div>
+        <div className="alert alert-danger mt-5 text-center">
+          {error === "" ? "Something went wrong, try later" : error}
+        </div>
       </div>
     );
   }

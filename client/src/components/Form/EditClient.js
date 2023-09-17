@@ -123,7 +123,9 @@ const EditClient = () => {
     <div className="container-fluid vh-100 d-flex align-items-center justify-content-center">
       <div className="border p-4">
         {errorFound && (
-          <div className="text-center bg-danger text-white p-4">{error}</div>
+          <div className="text-center bg-danger text-white p-4">
+            {error === "" ? "Something went wrong, try later" : error}
+          </div>
         )}
         <h2 className="mb-4">Edit Customer Information</h2>
         <form onSubmit={handleUpdate}>
